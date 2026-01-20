@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as leepa from "../leepa.js";
 import type * as properties from "../properties.js";
 
 import type {
@@ -17,6 +18,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  leepa: typeof leepa;
   properties: typeof properties;
 }>;
 

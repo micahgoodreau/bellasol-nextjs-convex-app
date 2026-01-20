@@ -1,10 +1,19 @@
 "use client"; 
 
+import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import Image from "next/image";
-import { api } from "../convex/_generated/api";
-
-export default function Home() {
+import { use } from 'react'
+ 
+export default function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const { slug } = use(params)
+  const { query } = use(searchParams)
   const leepa = useQuery(api.leepa.get);
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -22,7 +31,7 @@ export default function Home() {
             To get started, edit the page.tsx file.
           </h1>
           <div className="mt-4">
-            {leepa?.map(({ _id, unit_number, owner_name }) => <div className="text-zinc-200" key={_id}>{unit_number} {owner_name}</div>)}
+            Query {query?.toString()}  Slug {slug?.toString()}
           </div>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Test Looking for a starting point or more instructions? Head over to{" "}
