@@ -1,5 +1,5 @@
-"use client"; 
-
+"use client";
+import { v } from "convex/values";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import Image from "next/image";
@@ -7,14 +7,12 @@ import { use } from 'react'
  
 export default function Page({
   params,
-  searchParams,
 }: {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  params: Promise<{ unit_number: number }>;
 }) {
-  const { slug } = use(params)
-  const { query } = use(searchParams)
-  const leepa = useQuery(api.leepa.get);
+  const { unit_number } = use(params);
+  const leepa = useQuery(api.leepa.getUnitByUnitNumber, { unit_number: parseFloat(unit_number.toString()) });
+  console.log(leepa);
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
@@ -28,10 +26,29 @@ export default function Page({
         />
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+            Unit Information Page
           </h1>
           <div className="mt-4">
-            Query {query?.toString()}  Slug {slug?.toString()}
+            {leepa?.map(({ 
+              _id,
+              unit_number,
+              owner_name,
+              address1,
+              address2,
+              address3,
+              address4,
+              country }) => 
+            
+            <div className="text-zinc-200" key={_id}>
+              <p className="text-xl">Unit Number:{unit_number}</p>
+              <p>{owner_name}</p>
+              <p>{address1}</p>
+              <p>{address2}</p>
+              <p>{address3}</p>
+              <p>{address4}</p>
+              <p>{country}</p>
+              
+              </div>)}
           </div>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Test Looking for a starting point or more instructions? Head over to{" "}

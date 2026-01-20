@@ -9,7 +9,7 @@
  */
 
 import type * as leepa from "../leepa.js";
-import type * as properties from "../properties.js";
+import type * as units from "../units.js";
 
 import type {
   ApiFromModules,
@@ -19,7 +19,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   leepa: typeof leepa;
-  properties: typeof properties;
+  units: typeof units;
 }>;
 
 /**

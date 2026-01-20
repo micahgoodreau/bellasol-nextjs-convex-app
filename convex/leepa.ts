@@ -1,11 +1,22 @@
+import { v } from "convex/values";
 import { query } from "./_generated/server";
 
-export const get = query({
+export const getAll = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("leepa")
+    return await ctx.db.query("leepa_owners")
     .withIndex("leepa_by_unit_number")
     .order("asc")
+    .collect();
+  },
+});
+
+export const getUnitByUnitNumber = query({
+  args: {unit_number: v.float64()},
+  handler: async (ctx, args) => {
+    const { unit_number } = args;
+    return await ctx.db.query("leepa_owners")
+    .filter(q => q.eq(q.field("unit_number"), unit_number))
     .collect();
   },
 });

@@ -2,7 +2,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-  properties: defineTable({
+  units: defineTable({
     association_number: v.float64(),
     building_number: v.float64(),
     city: v.string(),
@@ -14,7 +14,7 @@ export default defineSchema({
     unit_number: v.float64(),
     zip: v.string(),
   }).index("by_unit_number", ["unit_number"]),
-  leepa: defineTable({
+  leepa_owners: defineTable({
     address1: v.string(),
     address2: v.string(),
     address3: v.string(),
@@ -24,5 +24,6 @@ export default defineSchema({
     owner_name: v.string(),
     strap: v.string(),
     unit_number: v.float64(),
-  }).index("leepa_by_unit_number", ["unit_number"]),
+  }).index("leepa_by_unit_number", ["unit_number"])
+  .searchIndex("leepa_unit_number_search", { searchField: "unit_number" }),
 });
