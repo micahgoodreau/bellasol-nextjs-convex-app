@@ -5,7 +5,7 @@ import Image from "next/image";
 import { api } from "../convex/_generated/api";
 
 export default function Home() {
-  const leepa = useQuery(api.leepa.getAll);
+  const leepa = useQuery(api.leepa.getMostRecentSales);
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
@@ -22,7 +22,17 @@ export default function Home() {
             To get started, edit the page.tsx file.
           </h1>
           <div className="mt-4">
-            {leepa?.map(({ _id, unit_number, owner_name }) => <div className="text-zinc-200" key={_id}>{unit_number} {owner_name}</div>)}
+            <div className="flex text-zinc-200">
+              <div className="w-14" >Unit</div>
+              <div className="w-24 text-right pr-5">Sale Amount</div>
+              <div className="w-48">Sale Date</div>
+            </div>
+            {leepa?.map(({ _id, unit_number, sale_amount, sale_date }) => 
+            <div className="flex text-zinc-200" key={_id}>
+              <div className="w-14" >{unit_number}</div>
+              <div className="w-24 text-right pr-5"> {sale_amount}</div>
+              <div className="w-48">{sale_date.slice(0, -10)}</div>
+            </div>)}
           </div>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Test Looking for a starting point or more instructions? Head over to{" "}

@@ -20,3 +20,13 @@ export const getUnitByUnitNumber = query({
     .collect();
   },
 });
+
+export const getMostRecentSales = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("leepa_sales")
+    .withIndex("leepa_sales_by_sale_date")
+    .order("desc")
+    .take(25);
+  },
+});
