@@ -30,3 +30,13 @@ export const getMostRecentSales = query({
     .take(25);
   },
 });
+
+export const getSalesByUnitNumber = query({
+  args: {unit_number: v.float64()},
+  handler: async (ctx, args) => {
+    const { unit_number } = args;
+    return await ctx.db.query("leepa_sales")
+    .filter(q => q.eq(q.field("unit_number"), unit_number))
+    .collect();
+  },
+});
