@@ -37,6 +37,7 @@ export const getSalesByUnitNumber = query({
     const { unit_number } = args;
     return await ctx.db.query("leepa_sales")
     .filter(q => q.eq(q.field("unit_number"), unit_number))
-    .collect();
+    .order("desc")
+    .take(25);
   },
 });

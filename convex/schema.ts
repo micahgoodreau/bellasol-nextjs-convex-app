@@ -31,7 +31,7 @@ export default defineSchema({
     sale_amount: v.float64(),
     unit_number: v.float64(),
   })
-  .index("leepa_sales_by_unit_number", ["unit_number", "sale_date"])
+  .index("leepa_sales_by_unit_number", ["unit_number"])
   .index("leepa_sales_by_sale_date", ["sale_date"])
   .searchIndex("leepa_sales_unit_number_search", { searchField: "unit_number" }),
 });
