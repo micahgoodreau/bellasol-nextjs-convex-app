@@ -11,7 +11,7 @@ export default function Page({
   params: Promise<{ unit_number: string }>;
 }) {
   const { unit_number } = use(params);
-  const leepa_owner = useQuery(api.leepa.getUnitByUnitNumber, { unit_number: parseFloat(unit_number) });
+  const leepa_owner = useQuery(api.leepa.getUnitByUnitNumber, { property_unit_number: parseFloat(unit_number) });
   const leepa_sales = useQuery(api.leepa.getSalesByUnitNumber, { unit_number: parseFloat(unit_number) });
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -31,21 +31,21 @@ export default function Page({
           <div className="mt-4">
             {leepa_owner?.map(({ 
               _id,
-              owner_name,
-              address1,
-              address2,
-              address3,
-              address4,
-              country }) => 
+              leepa_owner_name,
+              leepa_address_1,
+              leepa_address_2,
+              leepa_address_3,
+              leepa_address_4,
+              leepa_country}) => 
             
             <div className="text-zinc-200" key={_id}>
               <p className="text-xl">Leepa Owner Information</p>
-              <p>{owner_name}</p>
-              <p>{address1}</p>
-              <p>{address2}</p>
-              <p>{address3}</p>
-              <p>{address4}</p>
-              <p>{country}</p>
+              <p>{leepa_owner_name}</p>
+              <p>{leepa_address_1}</p>
+              <p>{leepa_address_2}</p>
+              <p>{leepa_address_3}</p>
+              <p>{leepa_address_4}</p>
+              <p>{leepa_country}</p>
               
               </div>)}
           <p className="mt-6 text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
