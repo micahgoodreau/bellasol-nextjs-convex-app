@@ -61,8 +61,8 @@ export const getSalesByUnitNumber = query({
   handler: async (ctx, args) => {
     const { unit_number } = args;
     return await ctx.db.query("leepa_sales")
-    .filter(q => q.eq(q.field("unit_number"), unit_number))
-    .order("desc")
+    .withIndex("leepa_sales_by_unit_number", (q) => q.eq("unit_number", unit_number))
+    //.filter(q => q.eq(q.field("unit_number"), unit_number))
     .take(25);
   },
 });
