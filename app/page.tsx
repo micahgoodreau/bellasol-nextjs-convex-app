@@ -51,8 +51,8 @@ export default function Home() {
   };
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
+      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black">
+        <div className="flex flex-col items-center gap-6 text-center">
       <h1 className="text-2xl font-semibold mb-4">Search Owners</h1>
 
       <input
@@ -84,55 +84,53 @@ export default function Home() {
         )}
       </div>
     </div>
-          <h1 className="max-w-xs text-xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            Click on a building number to see more details about that building and its units.
-          </h1>
-          <div className="max-w-lg text-sm leading-8 text-zinc-600 dark:text-zinc-400">
-    <table border={1} cellPadding="8" style={{ borderCollapse: "collapse" }}>
-      <thead>
-        
-        <tr>
-          <th className="pr-4" onClick={() => requestSort("building_number")}>
-            Building Number {sortConfig.key === "building_number" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-          </th>
-          <th className="pr-4" onClick={() => requestSort("association_number")}>
-            Association Number {sortConfig.key === "association_number" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-          </th>
-          <th className="pr-4" onClick={() => requestSort("street_address")}>
-            Street Address {sortConfig.key === "street_address" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedbuildings.map((p) => (
-          
-          <tr key={p._id}>
-            
-            <td><Link href={`/building/${p.building_number}`}>{p.building_number}</Link></td>
-            <td><Link href={`/building/${p.building_number}`}>{p.association_number}</Link></td>
-            <td><Link href={`/building/${p.building_number}`}>{p.street_address}</Link></td>
 
-          </tr>
-        ))}
-      </tbody>
-    </table>
-      </div>
-      <div className="max-w-lg text-sm leading-8 text-zinc-600 dark:text-zinc-400">
-        <h1 className="text-2xl text-white font-semibold mb-4">Recent Sales</h1>
-        <table border={1} cellPadding="8" style={{ borderCollapse: "collapse" }}>
+      <div className="max-w-md text-xs leading-8 text-zinc-600 dark:text-zinc-400 xs:w-full">
+        <table className="w-96" border={1} cellPadding="2" style={{ borderCollapse: "collapse" }}>
           <thead>
             
             <tr>
-              <th className="pr-4">Unit Number</th>
-              <th className="pr-4">Sale Amount</th>
-              <th className="pr-4">Sale Date</th>
+              <th className="w-1/4 text-left" onClick={() => requestSort("building_number")}>
+                Building {sortConfig.key === "building_number" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className="w-1/4 text-left" onClick={() => requestSort("association_number")}>
+                Association {sortConfig.key === "association_number" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className="w-1/2 text-center" onClick={() => requestSort("street_address")}>
+                Address {sortConfig.key === "street_address" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedbuildings.map((p) => (
+              
+              <tr key={p._id}>
+                
+                <td><Link href={`/building/${p.building_number}`}>{p.building_number}</Link></td>
+                <td><Link href={`/building/${p.building_number}`}>{p.association_number}</Link></td>
+                <td><Link href={`/building/${p.building_number}`}>{p.street_address}</Link></td>
+
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="max-w-lg text-xs leading-8 text-zinc-600 dark:text-zinc-400">
+        <h1 className="text-2xl text-white font-semibold mb-4">Recent Sales</h1>
+        <table className="w-96" border={1} cellPadding="8" style={{ borderCollapse: "collapse" }}>
+          <thead>
+            
+            <tr>
+              <th className="pr-4 text-left">Unit Number</th>
+              <th className="pr-4 text-center">Sale Amount</th>
+              <th className="pr-4 text-left">Sale Date</th>
             </tr>
           </thead>
           <tbody>
             {leepa?.map(({ _id, unit_number, sale_amount, sale_date }) => 
             <tr key={_id}>
               <td className=""><Link href={`/unit/${unit_number}`}>{unit_number}</Link></td>
-              <td className="text-right pr-5">{USDollar.format(sale_amount)}</td>
+              <td className="text-right pr-15">{USDollar.format(sale_amount)}</td>
               <td className="">{sale_date.slice(0, -10)}</td>
             </tr>)}
           </tbody>
