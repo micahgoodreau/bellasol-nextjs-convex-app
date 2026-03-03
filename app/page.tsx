@@ -106,9 +106,9 @@ export default function Home() {
               
               <tr key={p._id}>
                 
-                <td><Link href={`/building/${p.building_number}`}>{p.building_number}</Link></td>
-                <td><Link href={`/building/${p.building_number}`}>{p.association_number}</Link></td>
-                <td><Link href={`/building/${p.building_number}`}>{p.street_address}</Link></td>
+                <td className="text-right pr-25"><Link href={`/building/${p.building_number}`}>{p.building_number}</Link></td>
+                <td className="text-right pr-20"><Link href={`/building/${p.building_number}`}>{p.association_number}</Link></td>
+                <td className="text-center"><Link href={`/building/${p.building_number}`}>{p.street_address}</Link></td>
 
               </tr>
             ))}
@@ -129,7 +129,7 @@ export default function Home() {
           <tbody>
             {leepa?.map(({ _id, unit_number, sale_amount, sale_date }) => 
             <tr key={_id}>
-              <td className=""><Link href={`/unit/${unit_number}`}>{unit_number}</Link></td>
+              <td className="text-right pr-20"><Link href={`/unit/${unit_number}`}>{unit_number}</Link></td>
               <td className="text-right pr-15">{USDollar.format(sale_amount)}</td>
               <td className="">{sale_date.slice(0, -10)}</td>
             </tr>)}
