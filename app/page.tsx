@@ -63,7 +63,7 @@ export default function Home() {
         className="border rounded px-3 py-2 w-full mb-4"
       />
 
-      <div className="space-y-3">
+      <div className="space-y-3 text-left">
         {results.map(r => (
           <div key={r._id} className="border p-3 rounded">
             <p><strong><Link href={`/unit/${r.property_unit_number}`}>{r.property_unit_number}</Link></strong></p>
