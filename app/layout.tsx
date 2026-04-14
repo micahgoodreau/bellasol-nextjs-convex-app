@@ -11,6 +11,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ConvexClientProvider } from './ConvexClientProvider'
 import BackButton from './components/BackButton'
+import { ThemeProvider } from "@/components/ui/theme-provider"
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,10 +35,10 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <header className="flex justify-between items-center p-4 gap-4 h-16">
-              <div className="text-lg font-bold"><BackButton />Bellasol Condo Info</div>
+              <div className="text-lg font-bold"><BackButton /></div>
               
               {/* Show the sign-in and sign-up buttons when the user is signed out */}
               <SignedOut>
@@ -53,7 +54,16 @@ export default function RootLayout({
                 <UserButton />
               </SignedIn>
             </header>
-            <ConvexClientProvider>{children}</ConvexClientProvider>
+            <ConvexClientProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+              </ThemeProvider>    
+            </ConvexClientProvider>
           </body>
         </html>
       </ClerkProvider>

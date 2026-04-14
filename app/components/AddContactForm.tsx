@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { Button } from "@/components/ui/button";
 
 type AddContactFormProps = {
   unitId: Id<"units">;
@@ -74,12 +75,7 @@ export default function AddContactForm({ unitId }: AddContactFormProps) {
           />
         </div>
 
-        <button
-          type="submit"
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
-          Add Contact
-        </button>
+        <Button type="submit">Add Contact</Button>
 
         {status && <p className="text-sm text-gray-600 dark:text-gray-300">{status}</p>}
       </form>
