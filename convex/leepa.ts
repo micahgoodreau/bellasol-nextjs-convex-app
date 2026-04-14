@@ -19,21 +19,14 @@ export const getAllBuildings = query({
     .collect();
   },
 });
-export const getUnitByUnitNumber = query({
-  args: {property_unit_number: v.float64()},
-  handler: async (ctx, args) => {
-    const { property_unit_number } = args;
-    return await ctx.db.query("leepa_owners")
-    .filter(q => q.eq(q.field("property_unit_number"), property_unit_number))
-    .collect();
-  },
-});
+
+
 export const getUnitsByBuildingNumber = query({
-  args: {property_building_number: v.float64()},
+  args: {building_number: v.float64()},
   handler: async (ctx, args) => {
-    const { property_building_number } = args;
+    const { building_number } = args;
     return await ctx.db.query("leepa_owners")
-    .filter(q => q.eq(q.field("property_building_number"), property_building_number))
+    .filter(q => q.eq(q.field("building_number"), building_number))
     .collect();
   },
 });
@@ -64,5 +57,16 @@ export const getSalesByUnitNumber = query({
     .withIndex("leepa_sales_by_unit_number", (q) => q.eq("unit_number", unit_number))
     //.filter(q => q.eq(q.field("unit_number"), unit_number))
     .take(25);
+  },
+});
+
+export const getLeepaOwnersByUnitNumber = query({
+  args: {unit_number: v.float64()},
+  handler: async (ctx, args) => {
+    const { unit_number } = args;
+    return await ctx.db.query("leepa_owners")
+    .withIndex("leepa_by_unit_number", (q) => q.eq("unit_number", unit_number))
+    //.filter(q => q.eq(q.field("unit_number"), unit_number))
+    .collect();
   },
 });

@@ -4,8 +4,10 @@ import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
+  const { isSignedIn, user, isLoaded } = useUser()
   const [search_text, setSearchText] = useState("");
   const results = useQuery(api.leepa.getUnitByFullTextSearch, { search_text }) ?? [];
   const leepa = useQuery(api.leepa.getMostRecentSales);
@@ -49,10 +51,15 @@ export default function Home() {
     }
     setSortConfig({ key, direction });
   };
+  if (!isLoaded) return <div>Loading...</div>;
+  if (!isSignedIn) return <div>Please sign in to view the data.</div>;
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black">
+        
+        
         <div className="flex flex-col items-center gap-6 text-center">
+           <div>Hello {user.id}!</div>
       <h1 className="text-2xl font-semibold mb-4">Search Owners</h1>
 
       <input
@@ -66,14 +73,16 @@ export default function Home() {
       <div className="space-y-3 text-left">
         {results.map(r => (
           <div key={r._id} className="border p-3 rounded">
-            <p><strong><Link href={`/unit/${r.property_unit_number}`}>{r.property_unit_number}</Link></strong></p>
-            <p>{r.leepa_owner_name}</p>
-            <p>{r.leepa_address_1}</p>
-            <p>{r.leepa_address_2}</p>
-            <p>{r.leepa_address_3}</p>
-            <p>{r.leepa_address_4}</p>
-            <p>{r.leepa_country}</p>
-            <a href={`https://www.leepa.org/Display/DisplayParcel.aspx?FolioID=${r.leepa_folio}`} target="_blank" rel="noopener noreferrer">
+            <Link href={`/unit/${r.unit_number}`}>
+            <p><strong>{r.unit_number}</strong></p>
+            <p>{r.owner_name}</p>
+            <p>{r.address_1}</p>
+            <p>{r.address_2}</p>
+            <p>{r.address_3}</p>
+            <p>{r.address_4}</p>
+            <p>{r.country}</p>
+            </Link>
+            <a href={`https://www.leepa.org/Display/DisplayParcel.aspx?FolioID=${r.folio}`} target="_blank" rel="noopener noreferrer">
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View Details on Leepa</button>
             </a>
           </div>

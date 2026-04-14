@@ -8,8 +8,12 @@
  * @module
  */
 
+import type * as crons from "../crons.js";
 import type * as leepa from "../leepa.js";
+import type * as myFunctions from "../myFunctions.js";
+import type * as storageQueries from "../storageQueries.js";
 import type * as units from "../units.js";
+import type * as update from "../update.js";
 
 import type {
   ApiFromModules,
@@ -18,8 +22,12 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  crons: typeof crons;
   leepa: typeof leepa;
+  myFunctions: typeof myFunctions;
+  storageQueries: typeof storageQueries;
   units: typeof units;
+  update: typeof update;
 }>;
 
 /**
