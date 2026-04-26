@@ -49,10 +49,22 @@ export const addContact = mutation({
   args: {
     first_name: v.string(),
     last_name: v.string(),
-    email: v.string(),
+    notes: v.string(),
     unit: v.id("units"),
   },
-  handler: async (ctx, { first_name, last_name, email, unit }) => {
-    await ctx.db.insert("contacts", { first_name, last_name, email, unit });
+  handler: async (ctx, { first_name, last_name, notes, unit }) => {
+    await ctx.db.insert("contacts", { first_name, last_name, notes, unit });
+  },
+});
+
+export const updateContact = mutation({
+  args: {
+    contactId: v.id("contacts"),
+    first_name: v.string(),
+    last_name: v.string(),
+    notes: v.string(),
+  },
+  handler: async (ctx, { contactId, first_name, last_name, notes }) => {
+    await ctx.db.patch(contactId, { first_name, last_name, notes });
   },
 });

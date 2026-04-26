@@ -6,9 +6,19 @@ export default defineSchema({
   contacts: defineTable({
     first_name: v.string(),
     last_name: v.string(),
-    email: v.string(),
+    notes: v.string(),
     unit: v.id("units"),
   }).index("by_unit", { fields: ["unit"] }),
+  phone_numbers: defineTable({
+    number: v.string(),
+    type: v.string(),
+    contact: v.id("contacts"),
+  }).index("by_contact", { fields: ["contact"] }),
+  email_addresses: defineTable({
+    email: v.string(),
+    type: v.string(),
+    contact: v.id("contacts"),
+  }).index("by_contact", { fields: ["contact"] }),
   units: defineTable({
     association_number: v.float64(),
     building_number: v.float64(),

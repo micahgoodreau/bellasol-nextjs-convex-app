@@ -2,6 +2,7 @@
 import AddContactForm from "@/app/components/AddContactForm";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
+import Link from "next/link";
 import { use, useState } from 'react'
  
 export default function Page({
@@ -75,7 +76,9 @@ export default function Page({
               <ul className="list-disc list-inside">
                 {unitInfo.contacts.map((contact) => (
                   <li key={contact._id} className="text-sm text-gray-600">
-                    {contact.first_name} {contact.last_name} - {contact.email}
+                    <Link href={`/contact/${contact._id}`}>
+                      {contact.first_name} {contact.last_name}
+                    </Link>
                   </li>
                 ))}
               </ul>

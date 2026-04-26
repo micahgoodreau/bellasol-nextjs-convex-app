@@ -1,49 +1,84 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 
-type AddContactFormProps = {
-  unitId: Id<"units">;
+type Contact = {
+  _id: Id<"contacts">;
+  first_name: string;
+  last_name: string;
+  notes: string;
+  unit: Id<"units">;
 };
 
-export default function AddContactForm({ unitId }: AddContactFormProps) {
+type AddContactFormProps = {
+  unitId: Id<"units">;
+  contact?: Contact;
+  onSuccess?: () => void;
+};
+
+export default function AddContactForm({ unitId, contact, onSuccess }: AddContactFormProps) {
   const addContact = useMutation(api.units.addContact);
+  const updateContact = useMutation(api.units.updateContact);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<string | null>(null);
+
+  const isEditing = !!contact;
+
+  useEffect(() => {
+    if (contact) {
+      setFirstName(contact.first_name);
+      setLastName(contact.last_name);
+      setNotes(contact.notes);
+    }
+  }, [contact]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!firstName || !lastName || !email) {
+    if (!firstName || !lastName || !notes) {
       setStatus("Please fill in all fields.");
       return;
     }
 
     try {
-      await addContact({
-        first_name: firstName.trim(),
-        last_name: lastName.trim(),
-        email: email.trim(),
-        unit: unitId,
-      });
-      setStatus("Contact added successfully.");
-      setFirstName("");
-      setLastName("");
-      setEmail("");
+      if (isEditing && contact) {
+        await updateContact({
+          contactId: contact._id,
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          notes: notes.trim(),
+        });
+        setStatus("Contact updated successfully.");
+      } else {
+        await addContact({
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          notes: notes.trim(),
+          unit: unitId,
+        });
+        setStatus("Contact added successfully.");
+        setFirstName("");
+        setLastName("");
+        setNotes("");
+      }
+      onSuccess?.();
     } catch (error) {
-      setStatus("Failed to add contact. Please try again.");
-      console.error("addContact failed", error);
+      const action = isEditing ? "update" : "add";
+      setStatus(`Failed to ${action} contact. Please try again.`);
+      console.error(`${action}Contact failed`, error);
     }
   };
 
   return (
     <div className="mt-8 rounded-lg border p-4 bg-white text-black shadow-sm">
-      <h2 className="mb-2 text-lg font-semibold">Add Contact</h2>
+      <h2 className="mb-2 text-lg font-semibold">
+        {isEditing ? "Edit Contact" : "Add Contact"}
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
           <label className="block text-sm font-medium">First name</label>
@@ -66,16 +101,17 @@ export default function AddContactForm({ unitId }: AddContactFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Email</label>
-          <input
+          <label className="block text-sm font-medium">Notes</label>
+          <textarea
             className="mt-1 w-full rounded border px-3 py-2 text-black"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
           />
         </div>
 
-        <Button type="submit">Add Contact</Button>
+        <Button type="submit">
+          {isEditing ? "Update Contact" : "Add Contact"}
+        </Button>
 
         {status && <p className="text-sm text-gray-600 dark:text-gray-300">{status}</p>}
       </form>

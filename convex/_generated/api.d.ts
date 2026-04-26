@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as contacts from "../contacts.js";
 import type * as crons from "../crons.js";
 import type * as leepa from "../leepa.js";
 import type * as myFunctions from "../myFunctions.js";
@@ -22,6 +23,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  contacts: typeof contacts;
   crons: typeof crons;
   leepa: typeof leepa;
   myFunctions: typeof myFunctions;
