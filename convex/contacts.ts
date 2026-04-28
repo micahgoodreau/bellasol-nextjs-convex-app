@@ -61,3 +61,43 @@ export const addPhoneNumber = mutation({
         return phone_number;
     }
 });
+
+export const updateEmailAddress = mutation({
+    args: {
+        emailId: v.id("email_addresses"),
+        email: v.string(),
+        type: v.string()
+    },
+    handler: async (ctx, { emailId, email, type }) => {
+        await ctx.db.patch(emailId, { email, type });
+    }
+});
+
+export const deleteEmailAddress = mutation({
+    args: {
+        emailId: v.id("email_addresses")
+    },
+    handler: async (ctx, { emailId }) => {
+        await ctx.db.delete(emailId);
+    }
+});
+
+export const updatePhoneNumber = mutation({
+    args: {
+        phoneId: v.id("phone_numbers"),
+        number: v.string(),
+        type: v.string()
+    },
+    handler: async (ctx, { phoneId, number, type }) => {
+        await ctx.db.patch(phoneId, { number, type });
+    }
+});
+
+export const deletePhoneNumber = mutation({
+    args: {
+        phoneId: v.id("phone_numbers")
+    },
+    handler: async (ctx, { phoneId }) => {
+        await ctx.db.delete(phoneId);
+    }
+});
