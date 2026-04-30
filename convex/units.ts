@@ -32,8 +32,26 @@ export const getUnitByUnitNumber = query({
     if (unit.length == 0) {
       return null;
     }
+    const contacts = await getContactsByUnit(ctx, unit[0]._id);
+    if (!contacts) {
+      return { result: unit[0], contacts: [] };
+    }
+    const contactsWithDetails = [];
+    for (const contact of contacts) {
+      const email_addresses = await ctx.db.query("email_addresses")
+        .withIndex("by_contact", (q) => q.eq("contact", contact._id))
+        .collect();
+      const phone_numbers = await ctx.db.query("phone_numbers")
+        .withIndex("by_contact", (q) => q.eq("contact", contact._id))
+        .collect();
+      contactsWithDetails.push({
+        ...contact,
+        email_addresses,
+        phone_numbers,
+      });
+    }
     const result = unit[0];
-    return {result, contacts: await getContactsByUnit(ctx, result._id)};
+    return {result, contacts: contactsWithDetails};
   },
 });
 

@@ -101,3 +101,41 @@ export const deletePhoneNumber = mutation({
         await ctx.db.delete(phoneId);
     }
 });
+
+export const updateContact = mutation({
+    args: {
+        contactId: v.id("contacts"),
+        first_name: v.string(),
+        last_name: v.string(),
+        notes: v.string()
+    },
+    handler: async (ctx, { contactId, first_name, last_name, notes }) => {
+        await ctx.db.patch(contactId, { first_name, last_name, notes });
+    }
+});
+
+export const deleteContact = mutation({
+    args: {
+        contactId: v.id("contacts")
+    },
+    handler: async (ctx, { contactId }) => {
+        // Delete all email addresses associated with this contact
+        const emails = await ctx.db.query("email_addresses")
+            .withIndex("by_contact", (q) => q.eq("contact", contactId))
+            .collect();
+        for (const email of emails) {
+            await ctx.db.delete(email._id);
+        }
+        
+        // Delete all phone numbers associated with this contact
+        const phones = await ctx.db.query("phone_numbers")
+            .withIndex("by_contact", (q) => q.eq("contact", contactId))
+            .collect();
+        for (const phone of phones) {
+            await ctx.db.delete(phone._id);
+        }
+        
+        // Delete the contact itself
+        await ctx.db.delete(contactId);
+    }
+});

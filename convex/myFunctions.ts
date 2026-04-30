@@ -19,7 +19,7 @@ export const doSomething = internalAction({
   },
 });
 
-async function getData(ctx: ActionCtx, storageId: Id<"_storage"> = "kg205y9rzx65j2wqvb6df3btmn83skqr" as Id<"_storage">) {
+async function getData(ctx: ActionCtx, storageId: Id<"_storage">) {
     const blob = await ctx.storage.get(storageId);
     return await blob?.text();
 }

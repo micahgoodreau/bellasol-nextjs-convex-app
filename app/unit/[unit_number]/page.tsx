@@ -4,6 +4,7 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import Link from "next/link";
 import { use, useState } from 'react'
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
  
 export default function Page({
   params,
@@ -71,17 +72,54 @@ export default function Page({
             </div>
           )}
           {unitInfo && unitInfo?.contacts?.length ? (
-            <div className="mt-6">
-              <h2 className="text-lg font-semibold mb-2">Contacts</h2>
-              <ul className="list-disc list-inside">
+            <div className="mt-6 w-full">
+              <h2 className="text-lg font-semibold mb-4">Contacts</h2>
+              <div className="grid gap-4">
                 {unitInfo.contacts.map((contact) => (
-                  <li key={contact._id} className="text-sm text-gray-600">
-                    <Link href={`/contact/${contact._id}`}>
-                      {contact.first_name} {contact.last_name}
-                    </Link>
-                  </li>
+                  <Card key={contact._id}>
+                    <CardHeader>
+                      <CardTitle>
+                        <Link href={`/contact/${contact._id}`} className="hover:underline">
+                          {contact.first_name} {contact.last_name}
+                        </Link>
+                      </CardTitle>
+                      {contact.notes && (
+                        <CardDescription>{contact.notes}</CardDescription>
+                      )}
+                    </CardHeader>
+                    <div className="px-4 pb-4">
+                      {contact.email_addresses && contact.email_addresses.length > 0 && (
+                        <div className="mb-3">
+                          <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Email Addresses</p>
+                          <ul className="space-y-1">
+                            {contact.email_addresses.map((email) => (
+                              <li key={email._id} className="text-sm text-gray-700">
+                                <a href={`mailto:${email.email}`} className="hover:underline text-blue-600">
+                                  {email.email}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {contact.phone_numbers && contact.phone_numbers.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Phone Numbers</p>
+                          <ul className="space-y-1">
+                            {contact.phone_numbers.map((phone) => (
+                              <li key={phone._id} className="text-sm text-gray-700">
+                                <a href={`tel:${phone.number}`} className="hover:underline text-blue-600">
+                                  {phone.number}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
                 ))}
-              </ul>
+              </div>
             </div>
           ) : null}
           <p className="mt-6 text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
